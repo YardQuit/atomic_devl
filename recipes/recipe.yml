@@ -5,7 +5,8 @@ description: This is my personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 40 # latest is also supported if you want new updates ASAP
+# base-image: ghcr.io/ublue-os/base-main
+image-version: latest # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -15,34 +16,279 @@ modules:
       - source: system
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        # cosmic desktop environment
+        - FiraMono
+        - FiraCode
+        # personal fonts
+        - GeistMono
+        - Lilex
+        
+  - type: script
+    snippets:
+      # cosmic desktop environment
+      - 'wget https://copr.fedorainfracloud.org/coprs/ryanabx/cosmic-epoch/repo/fedora-$(rpm -E %fedora)/ryanabx-cosmic-epoch-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_ryanabx-cosmic.repo'
+      # personal repositories
+      - sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://downloads.1password.com/linux/keys/1password.asc" > /etc/yum.repos.d/1password.repo'
+      - sh -c 'echo -e "[copr:copr.fedorainfracloud.org:pennbauman:ports]\nname=Copr repo for ports owned by pennbauman\nbaseurl=https://download.copr.fedorainfracloud.org/results/pennbauman/ports/fedora-\$releasever-\$basearch/\ntype=rpm-md\nskip_if_unavailable=True\ngpgcheck=1\ngpgkey=https://download.copr.fedorainfracloud.org/results/pennbauman/ports/pubkey.gpg\nrepo_gpgcheck=0\nenabled=1\nenabled_metadata=1" > /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:pennbauman\:ports.repo'
+      - sh -c 'echo -e "[copr:copr.fedorainfracloud.org:gmaglione:podman-bootc]\nname=Copr repo for podman-bootc owned by gmaglione\nbaseurl=https://download.copr.fedorainfracloud.org/results/gmaglione/podman-bootc/fedora-\$releasever-\$basearch/\ntype=rpm-md\nskip_if_unavailable=True\ngpgcheck=1\ngpgkey=https://download.copr.fedorainfracloud.org/results/gmaglione/podman-bootc/pubkey.gpg\nrepo_gpgcheck=0\nenabled=1\nenabled_metadata=1" > /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:gmaglione\:podman-bootc.repo'
+
   - type: rpm-ostree
     repos:
-      # - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
+      # personal repositories
+      - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
+      - https://fedorapeople.org/groups/virt/virtio-win/virtio-win.repo
+    keys:
+      - https://downloads.1password.com/linux/keys/1password.asc
+    optfix:
+      - 1Password
     install:
-      # - micro
-      # - starship
+      # cosmic desktop environment
+      - cosmic-desktop
+      - cosmic-idle
+      - NetworkManager-tui
+      - NetworkManager-openvpn
+      - gnome-keyring
+      - pinentry-gnome3
+      - udiskie
+      # personal - security and backup
+      - 1password
+      - fail2ban
+      - fail2ban-selinux
+      - fail2ban-systemd
+      - pam_yubico
+      - ykocli
+      - yubico-piv-tool
+      - borgbackup
+      - syncthing
+      - fapolicyd
+      - fapolicyd-selinux
+      - rpm-plugin-fapolicyd
+      # fedora, oci, and general development tools
+      - helix
+      - neovim
+      - osbuild
+      - osbuild-selinux
+      - koji
+      - podman-bootc
+      - podman-machine
+      - podman-compose
+      - fedora-packager
+      - fedora-review
+      - packit
+      - fedrq
+      - rpm-spec-language-server
+      - rpmdevtools
+      - rpmlint
+      - policycoreutils
+      - sepolicy_analysis
+      - libselinux-utils
+      - checkpolicy
+      - selinux-policy
+      - selinux-policy-mls
+      - selinux-policy-doc
+      - selinux-policy-mls
+      - selinux-policy-targeted
+      - setools-console
+      - setools-console-analyses
+      - libvirt-devel
+      - xorriso
+      - livecd-tools
+      - pykickstart
+      - rust
+      - rust-analyzer
+      - cargo
+      - rust-gdb
+      - rust2rpm
+      - rust-srpm-macros
+      - cargo-rpm-macros
+      - cargo2rpm
+      - clang 
+      - gdb
+      - gdb-doc
+      - valgrind
+      - golang
+      - golang-x-tools-gopls
+      - go-rpm-macros
+      - go-srpm-macros
+      - go-rpm-templates
+      - go2rpm
+      - python3-lsp-black
+      - python3-lsp-server+all
+      - python3-mypy
+      - python3-pytest
+      - python3-pytest-lsp
+      - zig
+      - zig-doc
+      - zig-libs
+      - zig-rpm-macros
+      - zig-srpm-macros
+      - python-pip
+      # personal - fonts
+      - cascadia-fonts-all
+      - fontawesome-fonts-all
+      - jetbrains-mono-fonts-all
+      - ibm-plex-mono-fonts
+      - liberation-fonts
+      # personal - virtualization
+      - docker
+      - libvirt
+      - libvirt-daemon-config-network
+      - libvirt-daemon-kvm
+      - virt-install
+      - virt-manager
+      - virt-viewer
+      - virt-top
+      - virtio-win
+      - qemu
+      - qemu-kvm
+      - tuned
+      - swtpm
+      - swtpm-libs
+      - swtpm-tools
+      - swtpm-selinux
+      - edk2-ovmf
+      - libguestfs
+      - libguestfs-bash-completion
+      - python3-libguestfs
+      # personal - multimedia
+      - mediainfo
+      - mpv
+      - PackageKit-gstreamer-plugin
+      - alsa-ucm
+      - alsa-utils
+      - gstreamer1-plugin-libav
+      - gstreamer1-plugin-openh264
+      - gstreamer1-plugins-bad-free
+      - gstreamer1-plugins-good
+      - gstreamer1-plugins-ugly-free
+      - libva-intel-media-driver
+      - pipewire-alsa
+      - pipewire-gstreamer
+      - pipewire-pulseaudio
+      - pipewire-utils
+      - wireplumber
+      - gstreamer-plugins-espeak
+      - ffmpeg
+      # personal - extra
+      - starship
+      - lf
+      - fd-find
+      - iucode-tool
+      - stow
+      - stow-doc
+      - texinfo
+      - tldr
+      - yum-utils
+      - ptyxis
+      - inxi
+      - fastfetch
+      - fzf
+      - sshfs
+      - dislocker
+      - pinentry-qt
+      - pinentry-tty
+      - pinentry-emacs
+      - translate-shell
+      - lm_sensors
+      - lshw
+      - nvtop
+      - parallel
+      - xxd
+      - sassc
+      - unrar
+      - p7zip
+      - btop
+      - solaar
+      - solaar-doc
+      - solaar-udev
+      # remove/replase at some point
+      - darktable
+      - darktable-tools-noise
+      - obs-studio
+      - gnome-shell-extension-pop-shell
+      - gnome-shell-extension-pop-shell-shortcut-overrides
+      - pop-gnome-shell-theme
+      - gimp
     remove:
-      # example: removing firefox (in favor of the flatpak)
-      # "firefox" is the main package, "firefox-langpacks" is a dependency
-      # - firefox
-      # - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+
+  - type: bling
+    install:
+      # personal bling not being configured at build time
+      - 1password
 
   - type: default-flatpaks
     notify: true # Send notification after install/uninstall is finished (true/false)
     system:
       # If no repo information is specified, Flathub will be used by default
-      # repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      # repo-name: flathub
-      # repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub
+      repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
       install:
-        # - org.mozilla.firefox
-        # - org.gnome.Loupe
-        # - one.ablaze.floorp//lightning # This is an example of flatpak which has multiple branches in selection (flatpak//branch).
+      # personal standard flatpaks
+        - com.github.wwmm.easyeffects
+        - hu.irl.cameractrls
+        - org.fedoraproject.MediaWriter
+        - org.gnome.Connections
+        - org.gnome.World.PikaBackup
+      # personal extra flatpaks
       # Flatpak runtimes are not supported (like org.winehq.Wine//stable-23.08),
       # only normal flatpak applications are (like Floorp Lightning web browser in this example).
       # Installing different branches of the same Flatpak is not supported.
       remove:
-      # - org.gnome.eog
+    user:
+      # If no repo information is specified, Flathub will be used by default
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub
+      repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
+      install:
+      # personal user flatpaks
+        - io.github.ungoogled_software.ungoogled_chromium
+        - com.brave.Browser
+        - io.freetubeapp.FreeTube
+        - org.libreoffice.LibreOffice
+      remove:
+
+  # configurations
+  - type: script
+    scripts:
+      # personal scripts
+      - kvm.sh
+      - yubico.sh
+    snippets:
+      # system configurations
+      - "echo 'options kvm_intel nested=1' > /etc/modprobe.d/kvm_intel.conf"
+      - "sed -i 's/^integrity = none/integrity = sha256/g' /etc/fapolicyd/fapolicyd.conf"
+      - "mkdir -p /var/lib/fapolicyd/"
+
+  - type: systemd
+    system:
+      enabled:
+        # cosmic desktop environment
+        # personal services
+        - rpm-ostreed-automatic.timer
+        - fail2ban.service
+        - tuned.service
+        - docker.service
+        - podman.socket
+        - fstrim.timer
+        - fapolicyd.service
+      disable:
+        - cosmic-greeter.service
+        - cosmic-greeter.daemon.service
+
+  - type: yafti
+  
+stages:
+  - name: bluebuild
+    from: docker.io/library/rust
+    modules:
+      - type: script
+        no-cache: true
+        snippets:
+          - "cargo install --locked --all-features blue-build"
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
 

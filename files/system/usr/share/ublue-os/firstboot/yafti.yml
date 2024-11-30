@@ -1,0 +1,22 @@
+
+# time_to_play_overwatch_applications:
+#   source: yafti.screen.package
+#   values:
+#     title: Script Execution
+#     show_terminal: true
+#     scripts:
+#       - name: "Setup crypttab to unlock drives"
+#         path: "/etc/yafti/scripts/script_crypttab.sh"
+#         description: "Edits crypttab"
+
+#       - name: "Setup fstab to mount unlocked drives"
+#         path: "/etc/yafti/scripts/script_fstab.sh"
+#         description: "Edits fstab to automount libvirt, home, and stash"
+
+#       - name: "Setup libvirt"
+#         path: "/etc/yafti/scripts/script_libvirt.sh"
+#         description: "Configures libirt path and add libvirt group to $USER"
+
+#       - name: "Setup syncthing"
+#         path: "/etc/yafti/scripts/script_libvirt.sh"
+#         description: "enables syncthing service"
