@@ -291,7 +291,7 @@ modules:
       enabled:
         # cosmic desktop environment
         - cosmic-greeter.service
-        - cosmic-greeter.daemon.service
+        # - cosmic-greeter.daemon.service
         # personal services
         - rpm-ostreed-automatic.timer
         - fail2ban.service
