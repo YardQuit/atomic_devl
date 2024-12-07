@@ -78,6 +78,7 @@ modules:
       - udiskie
       # personal - security and backup
       - 1password
+      - pass
       - fail2ban
       - fail2ban-selinux
       - fail2ban-systemd
