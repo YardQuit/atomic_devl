@@ -36,6 +36,7 @@ modules:
       - sh -c 'echo -e "[copr:copr.fedorainfracloud.org:gmaglione:podman-bootc]\nname=Copr repo for podman-bootc owned by gmaglione\nbaseurl=https://download.copr.fedorainfracloud.org/results/gmaglione/podman-bootc/fedora-\$releasever-\$basearch/\ntype=rpm-md\nskip_if_unavailable=True\ngpgcheck=1\ngpgkey=https://download.copr.fedorainfracloud.org/results/gmaglione/podman-bootc/pubkey.gpg\nrepo_gpgcheck=0\nenabled=1\nenabled_metadata=1" > /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:gmaglione\:podman-bootc.repo'
       # prepare fapolicy inststall
       - "mkdir -p /var/lib/fapolicyd/"
+      - "chmod 700 /var/lib/fapolicyd"
 
   - type: rpm-ostree
     repos:
@@ -287,6 +288,7 @@ modules:
       # system configurations
       - "echo 'options kvm_intel nested=1' > /etc/modprobe.d/kvm_intel.conf"
       - "sed -i 's/^integrity = none/integrity = sha256/g' /etc/fapolicyd/fapolicyd.conf"
+      - "restorecon -Rf /var/lib/fapolicyd/ -p system_u:object_r:fapolicyd_config_t"
 
   - type: systemd
     system:
