@@ -173,10 +173,10 @@ modules:
       - qemu
       - qemu-kvm
       - tuned
-      - swtpm
-      - swtpm-libs
-      - swtpm-tools
-      - swtpm-selinux
+      # - swtpm
+      # - swtpm-libs
+      # - swtpm-tools
+      # - swtpm-selinux
       - edk2-ovmf
       - libguestfs
       - libguestfs-bash-completion
