@@ -162,25 +162,25 @@ modules:
       - liberation-fonts
       # personal - virtualization
       - docker
-      - libvirt
-      - libvirt-daemon-config-network
-      - libvirt-daemon-kvm
-      - virt-install
-      - virt-manager
-      - virt-viewer
-      - virt-top
-      - virtio-win
-      - qemu
-      - qemu-kvm
+      # - libvirt
+      # - libvirt-daemon-config-network
+      # - libvirt-daemon-kvm
+      # - virt-install
+      # - virt-manager
+      # - virt-viewer
+      # - virt-top
+      # - virtio-win
+      # - qemu
+      # - qemu-kvm
       - tuned
       # - swtpm
       # - swtpm-libs
       # - swtpm-tools
       # - swtpm-selinux
-      - edk2-ovmf
-      - libguestfs
-      - libguestfs-bash-completion
-      - python3-libguestfs
+      # - edk2-ovmf
+      # - libguestfs
+      # - libguestfs-bash-completion
+      # - python3-libguestfs
       # personal - multimedia
       - mediainfo
       - mpv
